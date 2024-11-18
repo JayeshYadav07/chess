@@ -16,7 +16,7 @@ class ChessManager {
         socket.on("message", (data) => {
             const message = JSON.parse(data.toString());
             if (message.type === "init_games") {
-                if (this.pendingUser) {
+                if (this.pendingUser && this.users.includes(this.pendingUser)) {
                     const game = new Game_1.Game(this.pendingUser, socket);
                     this.games.push(game);
                     this.pendingUser = null;
@@ -34,6 +34,7 @@ class ChessManager {
         });
     }
     removeUser(socket) {
+        console.log("removeUser");
         this.users = this.users.filter((user) => user !== socket);
     }
 }

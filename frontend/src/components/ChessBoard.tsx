@@ -17,7 +17,7 @@ function ChessBoard() {
 			}
 		} catch (error: any) {
 			setFrom(null);
-			console.error(error.message);
+			alert(error.message);
 		}
 	};
 	const board = chess.board();
@@ -33,13 +33,21 @@ function ChessBoard() {
 										handleClick(i, j);
 									}}
 									key={j}
-									className={`w-16 h-16 flex items-center justify-center ${
+									className={`w-16 h-16 flex items-center justify-center cursor-pointer hover:opacity-85 ${
 										(i + j) % 2 !== 0
 											? "bg-green-500"
 											: "bg-white"
 									} `}
 								>
-									{square?.type}
+									<img
+										src={`${
+											square?.color == "b"
+												? `/${square.type}.png`
+												: `/${square?.type.toUpperCase()}.png`
+										}`}
+										alt=""
+										className="w-2/3"
+									/>
 								</div>
 							);
 						})}

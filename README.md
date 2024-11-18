@@ -1,20 +1,31 @@
-# chess
+# MyChess
 
-Install packages
+## How to run locally
+
+Clone repo
 
 ```shell
-npm init -y
-npm i typescript chess.js
+git clone https://github.com/JayeshYadav07/chess.git
 ```
 
-Compile ts code
+Start backend server code
 
 ```shell
-tsc -b
-```
-
-Run compiled code
-
-```shell
+cd chess/backend
+npm i
 node ./dist/index.js
+```
+
+Start Frontend application
+
+```shell
+cd chess/frontend
+npm i
+npm run dev
+```
+
+Check browser
+
+```
+http://localhost:5173/
 ```

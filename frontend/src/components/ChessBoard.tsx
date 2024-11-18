@@ -52,14 +52,12 @@ function ChessBoard({
 									}}
 									key={j}
 									className={`w-16 h-16 flex items-center justify-center cursor-pointer hover:opacity-85 ${
-										(i + j) % 2 !== 0
-											? "bg-green-500"
-											: "bg-white"
-									} ${
 										click.i == i && click.j == j
 											? "bg-red-500"
-											: ""
-									}`}
+											: (i + j) % 2 !== 0
+											? "bg-green-500"
+											: "bg-white"
+									} `}
 								>
 									<img
 										src={`${

@@ -48,7 +48,7 @@ export class Game {
 			this.board.move({ from: move.from, to: move.to });
 
 			// send move to other player
-			this.handleMove(socket, move);
+			this.handleMove(move);
 
 			// isCheckmate
 			if (this.board.isCheckmate()) {
@@ -64,22 +64,19 @@ export class Game {
 			return;
 		}
 	}
-	private handleMove(socket: WebSocket, move: Move) {
-		if (socket === this.player1) {
-			this.player2.send(
-				JSON.stringify({
-					type: "move",
-					data: move,
-				})
-			);
-		} else {
-			this.player1.send(
-				JSON.stringify({
-					type: "move",
-					data: move,
-				})
-			);
-		}
+	private handleMove(move: Move) {
+		this.player2.send(
+			JSON.stringify({
+				type: "move",
+				data: move,
+			})
+		);
+		this.player1.send(
+			JSON.stringify({
+				type: "move",
+				data: move,
+			})
+		);
 	}
 	private handleCheckmate(socket: WebSocket) {
 		this.player1.send(

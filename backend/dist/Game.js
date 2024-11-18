@@ -33,7 +33,7 @@ class Game {
             // make a move
             this.board.move({ from: move.from, to: move.to });
             // send move to other player
-            this.handleMove(socket, move);
+            this.handleMove(move);
             // isCheckmate
             if (this.board.isCheckmate()) {
                 return this.handleCheckmate(socket);
@@ -48,19 +48,15 @@ class Game {
             return;
         }
     }
-    handleMove(socket, move) {
-        if (socket === this.player1) {
-            this.player2.send(JSON.stringify({
-                type: "move",
-                data: move,
-            }));
-        }
-        else {
-            this.player1.send(JSON.stringify({
-                type: "move",
-                data: move,
-            }));
-        }
+    handleMove(move) {
+        this.player2.send(JSON.stringify({
+            type: "move",
+            data: move,
+        }));
+        this.player1.send(JSON.stringify({
+            type: "move",
+            data: move,
+        }));
     }
     handleCheckmate(socket) {
         this.player1.send(JSON.stringify({

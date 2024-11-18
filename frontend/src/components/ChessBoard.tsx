@@ -1,18 +1,37 @@
-import { Chess } from "chess.js";
+import { Color, PieceSymbol, Square } from "chess.js";
 import { useState } from "react";
 
-function ChessBoard() {
-	const [chess, setChess] = useState(new Chess());
+function ChessBoard({
+	board,
+	socket,
+}: {
+	board: ({
+		square: Square;
+		type: PieceSymbol;
+		color: Color;
+	} | null)[][];
+	socket: WebSocket | null;
+}) {
 	const [from, setFrom] = useState<null | string>(null);
-
+	const [click, setClick] = useState({ i: -1, j: -1 });
 	const handleClick = (i: number, j: number) => {
 		const squarePos = String.fromCharCode(97 + j) + (8 - i);
 		try {
 			if (from) {
-				chess.move({ from, to: squarePos });
-				setChess(new Chess(chess.fen()));
+				const move = {
+					from,
+					to: squarePos,
+				};
+				socket?.send(
+					JSON.stringify({
+						type: "move",
+						move,
+					})
+				);
+				setClick({ i: -1, j: -1 });
 				setFrom(null);
 			} else {
+				setClick({ i, j });
 				setFrom(squarePos);
 			}
 		} catch (error: any) {
@@ -20,7 +39,6 @@ function ChessBoard() {
 			alert(error.message);
 		}
 	};
-	const board = chess.board();
 	return (
 		<div>
 			{board.map((row, i) => {
@@ -37,7 +55,11 @@ function ChessBoard() {
 										(i + j) % 2 !== 0
 											? "bg-green-500"
 											: "bg-white"
-									} `}
+									} ${
+										click.i == i && click.j == j
+											? "bg-red-500"
+											: ""
+									}`}
 								>
 									<img
 										src={`${

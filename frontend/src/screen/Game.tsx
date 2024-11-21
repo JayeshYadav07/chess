@@ -3,6 +3,7 @@ import Button from "../components/Button";
 import ChessBoard from "../components/ChessBoard";
 import useSocket from "../hooks/useSocket";
 import { Chess } from "chess.js";
+import Moves from "../components/Moves";
 function Game() {
 	const [start, setStart] = useState(false);
 	const [wait, setWait] = useState(false);
@@ -35,27 +36,31 @@ function Game() {
 	}
 	return (
 		<div className="p-4 max-w-screen-lg grid mx-auto grid-cols-5 gap-4 pt-10">
-			<div className="col-span-4 flex justify-center">
+			<div className="col-span-3 flex justify-center">
 				<ChessBoard board={board} socket={socket} />
 			</div>
-			<div className="col-span-1 bg-slate-800 text-white flex justify-center p-4 rounded-sm">
-				<div>
-					{!start && (
+			{!start ? (
+				<div className="col-span-2 bg-slate-800 text-white flex justify-center p-4 rounded-sm">
+					<div>
 						<Button
 							onClick={() => {
 								if (!wait) {
 									setWait(true);
 									socket.send(
-										JSON.stringify({ type: "init_games" })
+										JSON.stringify({
+											type: "init_games",
+										})
 									);
 								}
 							}}
 						>
 							{wait ? "Waiting..." : "Play"}
 						</Button>
-					)}
+					</div>
 				</div>
-			</div>
+			) : (
+				<Moves moves={chess.history()} />
+			)}
 		</div>
 	);
 }
